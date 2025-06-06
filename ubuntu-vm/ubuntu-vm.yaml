@@ -2,7 +2,7 @@ apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
   name: ubuntu-vm
-  namespace: ormilon-stackconsole
+  namespace: my-vm-namespace
 spec:
   running: true
   template:
@@ -11,26 +11,15 @@ spec:
         kubevirt.io/domain: ubuntu-vm
     spec:
       domain:
-        cpu:
-          cores: 2
         devices:
           disks:
             - name: containerdisk
               disk:
                 bus: virtio
-            - name: cloudinitdisk
-              disk:
-                bus: virtio
-        memory:
-          guest: 2Gi
+        resources:
+          requests:
+            memory: 2Gi
       volumes:
         - name: containerdisk
           containerDisk:
-            image: quay.io/containerdisks/ubuntu:22.04
-        - name: cloudinitdisk
-          cloudInitNoCloud:
-            userData: |
-              #cloud-config
-              hostname: ubuntu-vm
-              ssh_authorized_keys:
-                - ssh-rsa AAAAB3...ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCjed3v2rx3gtFjxugrUK8DDKLxp0K2oKpEld5k5Jw0OceDD1lxfi0NZMzQU96u75lJ3lmWMSBeuctffzrRFcD+dLiXyp9e6E84IpFIShZGCa1/V/I1S0BAMVHaIr0Kj8Z/PtomoSmFHpOWtoaBsZpvWvZDZXlyCRAdCDVExGVvq5zA2vQT4D5EuaHQ4C95dkg77OiOzRN9Gn0VPE2E8ntI53NdUJ9iGQmOCSrV+enSUzfo7Rm0QR914djI/2832GYEoEfgUPwtbYZeVwR/aIBP2q79T7pf7oAxCTpQLkqWilOkZBQV/1w9JzGiAy2S5r0/NTM9EG1BV4hnV1Pd4M7GbqptVTHXaj70Aja5Narpeyb8Rk+zCZYnfqXz4WGKL+W/VQMs3J3RmngoEsAflHWXlAlGJFF7Ne5WDHed5GzPa0uztpAyQcQ/T3O++dRJPbQ5Lpjo0CXrAn6oHuEaFbhfGUw/d5Oz6b3z1pviomADXDXH8CzaBy+WtZ4FIvGw4gX3fN/BdddvTIVsL8ZmKjr9VXT+OIsE9lvXsP/HONZIMJ/fG/0H7iAE1+vJ0t1shdkFvPd2LdcemQSUaNIC6f2FCJ9MFfVega9UnxvSRIVD4EpNYwrW1h9VSFM3qSAqTZ3enuWkwzobWC2FLUYHJQpdQ3k0gvSazKyoNl+uLZ5Q2Q== ganesh.kanade@stackconsole.io
+            image: kubevirt/ubuntu-cloud-container-disk-demo:latest
