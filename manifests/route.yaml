@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: nextjs-route
+spec:
+  to:
+    kind: Service
+    name: nextjs-service
+  port:
+    targetPort: 3000
